@@ -1,9 +1,11 @@
 // @ts-check
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const dotenv = require('dotenv');
 
-const uri =
-  'mongodb+srv://pji0219:vhqlels1@cluster0.kodcv6a.mongodb.net/?retryWrites=true&w=majority';
+dotenv.config();
+
+const uri = process.env.DB_HOST;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

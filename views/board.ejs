@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+  <h1>게시판</h1>
+  <h2>총 게시글 수: <%= postCounts %></h2>
+  <a href="write">글쓰기</a>
+  <ul>
+    <% if(postCounts > 0) { %>
+    <% for (let i = 0; i < postCounts; i++) { %>
+    <li>
+      <p>title: <%= POST[i].title %></p>
+      <p>content: <%= POST[i].content %></p>
+      <a href="/modify">수정</a>
+      <button onclick="deletePost('<%= POST[i].title %>');">삭제</button>
+    </li>
+    <% } %>
+    <% } else { %>
+    <li>포스트가 없습니다.</li>
+    <% } %>
+  </ul>
+</body>
+
+<script>
+  function deletePost(title) {
+    fetch(`http://localhost:4000/board/${title}`, {
+      method: 'delete',
+      headers: {
+        'Content-type': 'application/json'
+      },
+    }).then((res) => {
+      console.log(res);
+    })
+  }
+</script>
+
+</html>
