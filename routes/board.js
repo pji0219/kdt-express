@@ -39,7 +39,13 @@ router.get('/:title', (req, res) => {
   }
 });
 
-router.post('/write', (req, res) => {
+// 글 작성 모드 진입 시 글 작성 폼 불러오는 라우터
+router.get('/write', (req, res) => {
+  res.render('write');
+});
+
+// 글 작성
+router.post('/', (req, res) => {
   if (req.body.title && req.body.content) {
     const newPost = {
       title: req.body.title,
@@ -55,8 +61,23 @@ router.post('/write', (req, res) => {
   }
 });
 
+// 수정 모드 진입 시 해당 글 불러오는 라우터
+router.get('/modifyMode/:title', (req, res) => {
+  const postData = POST.find((post) => post.title === req.params.title);
+  if (postData) {
+    const postIdx = POST.findIndex((post) => post.title === req.params.title);
+    const modifyFindPost = POST[postIdx];
+    res.render('modify', { modifyFindPost });
+  } else {
+    const err = new Error('해당 포스트가 존재하지 않습니다.');
+    err.statusCode = 404;
+    throw err;
+  }
+});
+
+// 글 수정
 router.put('/modify/:title', (req, res) => {
-  const postData = POST.find((post) => post.title === req.body.title);
+  const postData = POST.find((post) => post.title === req.params.title);
   if (postData) {
     const modifyPost = {
       title: req.body.title,

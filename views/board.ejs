@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
   <meta charset="UTF-8" />
@@ -12,15 +12,17 @@
 <body>
   <h1>게시판</h1>
   <h2>총 게시글 수: <%= postCounts %></h2>
-  <a href="write">글쓰기</a>
+  <a href="/board/write">글쓰기</a>
   <ul>
     <% if(postCounts > 0) { %>
     <% for (let i = 0; i < postCounts; i++) { %>
     <li>
-      <p>title: <%= POST[i].title %></p>
-      <p>content: <%= POST[i].content %></p>
-      <a href="/modify">수정</a>
-      <button onclick="deletePost('<%= POST[i].title %>');">삭제</button>
+      <span class="title"><%= POST[i].title %></span>
+      <div class="content"><%= POST[i].content %></div>
+      <div class="btn_container">
+        <a href="/board/modifyMode/<%= POST[i].title %>">수정</a>
+        <a href="/board" onclick="deletePost('<%= POST[i].title %>');">삭제</a>
+      </div>
     </li>
     <% } %>
     <% } else { %>
