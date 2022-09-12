@@ -76,7 +76,7 @@ router.get('/modifyMode/:title', (req, res) => {
 });
 
 // 글 수정
-router.put('/modify/:title', (req, res) => {
+router.post('/modify/:title', (req, res) => {
   const postData = POST.find((post) => post.title === req.params.title);
   if (postData) {
     const modifyPost = {
@@ -85,7 +85,6 @@ router.put('/modify/:title', (req, res) => {
     };
     const postIdx = POST.findIndex((post) => post.title === req.body.title);
     POST[postIdx] = modifyPost;
-    res.sendStatus(200);
     res.redirect('/board');
   } else {
     const err = new Error('해당 포스트가 없습니다.');
