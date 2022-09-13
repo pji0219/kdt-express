@@ -6,22 +6,22 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document</title>
-  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/board.css">
 </head>
 
 <body>
   <h1>게시판</h1>
   <h2>총 게시글 수: <%= postCounts %></h2>
-  <a href="/board/write">글쓰기</a>
-  <ul>
+  <a class="btn btn--write" href="/board/post/write">글쓰기</a>
+  <ul class="post_container">
     <% if(postCounts > 0) { %>
     <% for (let i = 0; i < postCounts; i++) { %>
-    <li>
+    <li class="post">
       <span class="title"><%= POST[i].title %></span>
       <div class="content"><%= POST[i].content %></div>
       <div class="btn_container">
-        <a href="/board/modifyMode/<%= POST[i].title %>">수정</a>
-        <a href="/board" onclick="deletePost('<%= POST[i].title %>');">삭제</a>
+        <a class="btn btn--modify" href="/board/modifyMode/<%= POST[i].title %>">수정</a>
+        <a class="btn btn--delete" href="/board" onclick="deletePost('<%= POST[i].title %>');">삭제</a>
       </div>
     </li>
     <% } %>

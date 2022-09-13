@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" href="./css/modify.css">
 </head>
 
 <body>
@@ -17,11 +18,11 @@
     </div>
     <div class="content_container">
       <h2>내용</h2>
-      <textarea class="content" name="content">
+      <textarea class="modify_content" name="content" resize="none" cols="50" rows="10">
         <%= modifyFindPost.content %>
       </textarea>
     </div>
-    <button type="submit">수정</button>
+    <button class="btn_modify" type="submit">수정</button>
   </form>
 </body>
 

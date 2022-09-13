@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <h1>글 쓰기</h1>
+  <form action="/board" method="post" class="write_form">
+    <div class="title_container">
+      <h2>제목</h2>
+      <input type="text" name="title" />
+    </div>
+    <div class="content_container">
+      <h2>내용</h2>
+      <textarea class="content" name="content" resize="none" cols="50" rows="10"></textarea>
+    </div>
+    <button type="submit">글 작성하기</button>
+  </form>
+</body>
+
+</html>

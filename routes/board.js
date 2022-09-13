@@ -40,7 +40,7 @@ router.get('/:title', (req, res) => {
 });
 
 // 글 작성 모드 진입 시 글 작성 폼 불러오는 라우터
-router.get('/write', (req, res) => {
+router.get('/post/write', (req, res) => {
   res.render('write');
 });
 
@@ -52,7 +52,6 @@ router.post('/', (req, res) => {
       content: req.body.content,
     };
     POST.push(newPost);
-    res.sendStatus(201);
     res.redirect('/board');
   } else {
     const err = new Error('모든 값을 입력해 주세요.');
@@ -94,7 +93,7 @@ router.post('/modify/:title', (req, res) => {
 });
 
 router.delete('/:title', (req, res) => {
-  const postIdx = POST.findIndex((post) => post.title === req.body.title);
+  const postIdx = POST.findIndex((post) => post.title === req.params.title);
   if (postIdx !== -1) {
     POST.splice(postIdx, 1);
     res.sendStatus(204);
