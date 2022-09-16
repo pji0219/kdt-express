@@ -6,15 +6,29 @@ const mongoClient = require('./mongo');
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+function isLogin(req, res, next) {
+  if (req.session.login) {
+    next();
+  } else {
+    res.status(300);
+    res.send('로그인 해주세요.<br><a href="/login">로그인 페이지로 이동</a>');
+  }
+}
+
+router.get('/', isLogin, async (req, res) => {
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('board');
   const POST = await cursor.find({}).toArray();
+
   const postLen = POST.length;
-  res.render('board', { POST, postCounts: postLen });
+  res.render('board', {
+    POST,
+    postCounts: postLen,
+    userId: req.session.userId,
+  });
 });
 
-router.get('/:title', (req, res) => {
+router.get('/:title', isLogin, (req, res) => {
   const postData = POST.find((post) => post.title === req.params.title);
   if (postData) {
     res.send(postData);
@@ -26,14 +40,15 @@ router.get('/:title', (req, res) => {
 });
 
 // 글 작성 모드 진입 시 글 작성 폼 불러오는 라우터
-router.get('/post/write', (req, res) => {
+router.get('/post/write', isLogin, (req, res) => {
   res.render('write');
 });
 
 // 글 작성
-router.post('/', async (req, res) => {
+router.post('/', isLogin, async (req, res) => {
   if (req.body.title && req.body.content) {
     const newPost = {
+      id: req.session.userId,
       title: req.body.title,
       content: req.body.content,
     };
@@ -50,7 +65,7 @@ router.post('/', async (req, res) => {
 });
 
 // 수정 모드 진입 시 해당 글 불러오는 라우터
-router.get('/modifyMode/:title', async (req, res) => {
+router.get('/modifyMode/:title', isLogin, async (req, res) => {
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('board');
   await cursor.findOne({ title: req.params.title }, (err, result) => {
@@ -64,7 +79,7 @@ router.get('/modifyMode/:title', async (req, res) => {
 });
 
 // 글 수정
-router.post('/modify/:title', async (req, res) => {
+router.post('/modify/:title', isLogin, async (req, res) => {
   if (req.body.title && req.body.content) {
     const client = await mongoClient.connect();
     const cursor = client.db('kdt1').collection('board');
@@ -80,7 +95,7 @@ router.post('/modify/:title', async (req, res) => {
   }
 });
 
-router.delete('/:title', async (req, res) => {
+router.delete('/:title', isLogin, async (req, res) => {
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('board');
   cursor.deleteOne({ title: req.params.title }, (err, result) => {
