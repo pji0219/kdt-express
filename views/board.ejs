@@ -19,12 +19,12 @@
     <% for (let i = 0; i < postCounts; i++) { %>
     <li class="post">
       <div class="author">
-        작성자 : <%= ARTICLE[i].id %>
+        작성자 : <%= POST[i].id %>
       </div>
       <span class="title"><%= POST[i].title %></span>
       <div class="content"><%= POST[i].content %></div>
       <div class="btn_container">
-        <% if (ARTICLE[i].id === userId) { %>
+        <% if (POST[i].id === userId) { %>
         <a class="btn btn--modify" href="/board/modifyMode/<%= POST[i].title %>">수정</a>
         <a class="btn btn--delete" href="/board" onclick="deletePost('<%= POST[i].title %>');">삭제</a>
         <% } %>
