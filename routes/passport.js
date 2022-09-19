@@ -32,9 +32,9 @@ module.exports = () => {
   passport.use(
     new NaverStrategy(
       {
-        clientID: '',
-        clientSecret: '',
-        callbackURL: '',
+        clientID: process.env.NAVER_CLIENT,
+        clientSecret: process.env.NAVER_SECRET,
+        callbackURL: process.env.NAVER_CB_URL,
       },
       async (accessToken, refreshToken, profile, cb) => {
         const client = await mongoClient.connect();
