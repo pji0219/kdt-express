@@ -1,9 +1,10 @@
 // @ts-check
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const dotenv = require('dotenv');
+// const dotenv = require('dotenv');
 
-dotenv.config();
+// dotenv.config();
+require('dotenv').config();
 
 const uri = process.env.DB_HOST;
 const client = new MongoClient(uri, {
