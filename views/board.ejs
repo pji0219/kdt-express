@@ -19,7 +19,7 @@
     <% for (let i = 0; i < postCounts; i++) { %>
     <li class="post">
       <div class="author">
-        작성자 : <%= POST[i].id %>
+        작성자 : <%= POST[i].userName ? POST[i].userName : POST[i].id  %>
       </div>
       <span class="title"><%= POST[i].title %></span>
       <div class="content"><%= POST[i].content %></div>

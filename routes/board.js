@@ -31,7 +31,7 @@ router.get('/post/write', login.isLogin, (req, res) => {
 router.post('/', login.isLogin, async (req, res) => {
   if (req.body.title && req.body.content) {
     const newPost = {
-      id: req.session.userId,
+      id: req.session.userId // ? sdfsdf : sdfsdf
       title: req.body.title,
       content: req.body.content,
     };
