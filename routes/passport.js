@@ -37,13 +37,14 @@ module.exports = () => {
         callbackURL: process.env.NAVER_CB_URL,
       },
       async (accessToken, refreshToken, profile, cb) => {
+        // console.log(profile);
         const client = await mongoClient.connect();
         const userCursor = client.db('kdt1').collection('users');
         const result = await userCursor.findOne({ id: profile.id });
         if (result !== null) {
           cb(null, result);
         } else {
-          console.log(profile.displayName);
+          // console.log(profile.displayName);
           const newNaverUser = {
             id: profile.id,
             name:
@@ -64,13 +65,14 @@ module.exports = () => {
   );
 
   passport.serializeUser((user, cb) => {
-    cb(null, user.id);
+    cb(null, user);
   });
 
   passport.deserializeUser(async (id, cb) => {
-    const client = await mongoClient.connect();
-    const userCursor = client.db('kdt1').collection('users');
-    const result = await userCursor.findOne({ id });
-    if (result !== null) cb(null, result);
+    cb(null, user);
+    // const client = await mongoClient.connect();
+    // const userCursor = client.db('kdt1').collection('users');
+    // const result = await userCursor.findOne({ id });
+    // if (result !== null) cb(null, result);
   });
 };

@@ -42,10 +42,10 @@ router.post('/', async (req, res, next) => {
   })(req, res, next);
 });
 
-router.get('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) throw err;
-    res.redirect('/');
+router.get('/logout', (req, res, next) => {
+  req.logOut((err) => {
+    if (err) return next(err);
+    return res.redirect('/');
   });
 });
 

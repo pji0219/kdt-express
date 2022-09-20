@@ -7,6 +7,7 @@ const mongoClient = require('./mongo');
 
 const login = require('./login');
 
+// 포스트 조회
 router.get('/', login.isLogin, async (req, res) => {
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('board');
@@ -24,14 +25,17 @@ router.get('/', login.isLogin, async (req, res) => {
   });
 });
 
+// 포스트 작성 페이지로
 router.get('/post/write', login.isLogin, (req, res) => {
   res.render('write');
 });
 
+// 포스트 작성
 router.post('/', login.isLogin, async (req, res) => {
   if (req.body.title && req.body.content) {
     const newPost = {
-      id: req.session.userId // ? sdfsdf : sdfsdf
+      id: req.session.userId ? req.session.userId : req.user.id,
+      userName: req.user?.name ? req.user.name : req.user?.id,
       title: req.body.title,
       content: req.body.content,
     };
@@ -47,6 +51,7 @@ router.post('/', login.isLogin, async (req, res) => {
   }
 });
 
+// 수정할 포스트 수정 페이지로
 router.get('/modifyMode/:title', login.isLogin, async (req, res) => {
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('board');
