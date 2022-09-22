@@ -1,7 +1,27 @@
 const express = require('express');
 
+const crypto = require('crypto');
+
 const router = express.Router();
 const mongoClient = require('./mongo');
+
+const createHashedPassword = (password) => {
+  const salt = crypto.randomBytes(64).toString('base64');
+  const hashedPassword = crypto
+    .pbkdf2Sync(password, salt, 10, 64, 'sha512')
+    .toString('base64');
+  // 해싱할 값, salt, 해시 함수 반복 횟수, 해시 값 길이, 해시 알고리즘
+  return { hashedPassword, salt };
+};
+
+function verifyPassword(password, salt, userPassword) {
+  const hashed = crypto
+    .pbkdf2Sync(password, salt, 10, 64, 'sha512')
+    .toString('base64');
+
+  if (hashed === userPassword) return true;
+  return false;
+}
 
 router.get('/', (req, res) => {
   res.render('register');
@@ -12,11 +32,14 @@ router.post('/', async (req, res) => {
   const userCursor = client.db('kdt1').collection('users');
   const duplicated = await userCursor.findOne({ id: req.body.id });
 
+  const passwordResult = createHashedPassword(req.body.password);
+
   if (duplicated === null) {
     const result = await userCursor.insertOne({
       id: req.body.id,
       name: req.body.id,
-      password: req.body.password,
+      password: passwordResult.hashedPassword,
+      salt: passwordResult.salt,
     });
     if (result.acknowledged) {
       res.status(200);
@@ -35,4 +58,4 @@ router.post('/', async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = { router, verifyPassword };

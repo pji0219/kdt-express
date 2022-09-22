@@ -23,6 +23,11 @@
       </div>
       <span class="title"><%= POST[i].title %></span>
       <div class="content"><%= POST[i].content %></div>
+      <div class="img">
+        <% if (POST[i].img != null) { %>
+        <img src="uploads/<%= POST[i].img %>" alt="img" width="500">
+        <% } %>
+      </div>
       <div class="btn_container">
         <% if (POST[i].id === userId) { %>
         <a class="btn btn--modify" href="/board/modifyMode/<%= POST[i].title %>">수정</a>

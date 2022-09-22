@@ -1,11 +1,31 @@
 // @ts-check
 const express = require('express');
 
+const multer = require('multer');
+
+const fs = require('fs');
+
 const router = express.Router();
 
 const mongoClient = require('./mongo');
 
 const login = require('./login');
+
+const dir = './uploads';
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '_' + Date.now());
+  },
+});
+
+const limits = {
+  fileSize: 1024 * 1024 * 2,
+};
+
+const upload = multer({ storage, limits });
 
 // 포스트 조회
 router.get('/', login.isLogin, async (req, res) => {
@@ -30,14 +50,17 @@ router.get('/post/write', login.isLogin, (req, res) => {
   res.render('write');
 });
 
-// 포스트 작성
-router.post('/', login.isLogin, async (req, res) => {
+// 포스트 작성, img는 ejs의 input의 name
+router.post('/', login.isLogin, upload.single('img'), async (req, res) => {
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+  console.log(req.file);
   if (req.body.title && req.body.content) {
     const newPost = {
       id: req.session.userId ? req.session.userId : req.user.id,
       userName: req.user?.name ? req.user.name : req.user?.id,
       title: req.body.title,
       content: req.body.content,
+      img: req.file ? req.file.filename : null,
     };
 
     const client = await mongoClient.connect();
